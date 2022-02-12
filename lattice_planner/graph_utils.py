@@ -82,12 +82,14 @@ class Graph:
 
                 uv_cost = self._get_cost(u, v)
 
-                if v in open_Heap.queue:
+                if any(v in item for item in open_Heap.queue):
 
                     old_cost = distances[v]
                     new_cost = u_cost + uv_cost
 
                     if new_cost < old_cost:
+
+                        open_Heap.put((new_cost, v))
                         distances[v] = new_cost
                         predecessors[v] = u
 
@@ -101,7 +103,51 @@ class Graph:
         return []
 
     def _solve_astar(self, s, g):
-        pass
+
+        open_Heap = PriorityQueue()
+
+        closed = set()
+        predecessors = dict()
+        distances = dict()
+        costs = dict()
+        open_Heap.put((0, s))
+
+        while not open_Heap.empty():
+
+            u_cost, u = open_Heap.get()
+
+            if u == g:
+                path = self._extract_path(s, g, predecessors)
+                return path
+
+            for v in self._get_adjacent(u):
+
+                if v in closed:
+                    continue
+
+                uv_cost = self._get_cost(u, v)
+
+                if any(v in item for item in open_Heap.queue):
+
+                    old_cost = distances[v]
+                    new_cost = u_cost + uv_cost + self._heuristic_fcn(v, g)
+
+                    if new_cost < old_cost:
+                        open_Heap.put((new_cost, v))
+                        distances[v] = new_cost
+                        costs[v] = u_cost + uv_cost
+                        predecessors[v] = u
+
+
+                else:
+                    open_Heap.put((u_cost + uv_cost, v))
+                    distances[v] = u_cost + uv_cost
+                    costs[v] = u_cost + uv_cost
+                    predecessors[v] = u
+
+            closed.add(u)
+
+        return []
 
     def _set_adjacency_matrix(self):
 
@@ -150,3 +196,6 @@ class Graph:
             return self._edge_dict[(v1, v2)]
         else:
             return np.inf
+
+    def _heuristic_fcn(self, v1, v2):
+        return np.sqrt((v2[0] - v1[0])**2 + (v2[1] - v1[1])**2)

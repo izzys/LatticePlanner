@@ -16,9 +16,9 @@ def main():
     # square grid , dim=2: (row, col)
     if lattice_type == 'square_grid':
         s = (1, 1)
-        g = (6, 9)
+        g = (9, 9)
 
-    # arc grid , dim=3: (row, col, theta) [theta = 0 is horizontal to the right, ccw]
+    # arc grid , dim=3: (row, col, angle) [angle = 0 is horizontal to the right, ccw]
     if lattice_type == 'arc_grid':
         s = (1, 1, 270)
         g = (4, 8, 90)
@@ -27,15 +27,15 @@ def main():
 
     obs.map[25:35, 45:56] = True
     obs.map[67:89, 57:76] = True
-    obs.map[50:55, 80:99] = True
+    obs.map[50:55, 80:89] = True
     obs.map[20:60, 25:35] = True
 
     graph.update_obstacles(obs)
 
     fig = drawing_utils.plot_scene(obs, graph, lattice_cell_size)
-    drawing_utils.plot_graph(fig, graph, lattice_cell_size)
+    drawing_utils.plot_graph(fig, graph, obs, lattice_cell_size)
 
-    path = graph.solve(s, g, 'dijkstra') # bfs, dijkstra,
+    path = graph.solve(s, g, 'A*') # bfs, dijkstra, A*
 
     print("path length = ", len(path))
 

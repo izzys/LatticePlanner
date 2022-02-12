@@ -86,11 +86,11 @@ class LatticeGraph:
 
                     if (col - 1) >= 0 and (row - 1) >= 0 and angle == 90:
                         v_top_left = (row - 1, col - 1, 180)
-                        self._graph.set_edge(v, v_top_left, 2)
+                        self._graph.set_edge(v, v_top_left, np.pi)
 
                     if (col + 1) < n_cols and (row - 1) >= 0 and angle == 90:
                         v_top_right = (row - 1, col + 1, 0)
-                        self._graph.set_edge(v, v_top_right, 2)
+                        self._graph.set_edge(v, v_top_right, np.pi)
 
                     # buttom row
                     if (row + 1) < n_rows and angle == 270:
@@ -99,11 +99,11 @@ class LatticeGraph:
 
                     if (col - 1) >= 0 and (row + 1) < n_rows and angle == 270:
                         v_buttom_left = (row + 1, col - 1, 180)
-                        self._graph.set_edge(v, v_buttom_left, 2)
+                        self._graph.set_edge(v, v_buttom_left, np.pi)
 
                     if (col + 1) < n_cols and (row + 1) < n_rows and angle == 270:
                         v_buttom_right = (row + 1, col + 1, 0)
-                        self._graph.set_edge(v, v_buttom_right, 2)
+                        self._graph.set_edge(v, v_buttom_right, np.pi)
 
                     # left col
                     if (col - 1) >= 0 and angle == 180:
@@ -112,11 +112,11 @@ class LatticeGraph:
 
                     if (col - 1) >= 0 and (row - 1) >= 0 and angle == 180:
                         v_left_up = (row - 1, col - 1, 90)
-                        self._graph.set_edge(v, v_left_up, 2)
+                        self._graph.set_edge(v, v_left_up, np.pi)
 
                     if (col - 1) >= 0 and (row + 1) < n_rows and angle == 180:
                         v_left_down = (row + 1, col - 1, 270)
-                        self._graph.set_edge(v, v_left_down, 2)
+                        self._graph.set_edge(v, v_left_down, np.pi)
 
                     # right col
                     if (col + 1) < n_cols and angle == 0:
@@ -125,14 +125,14 @@ class LatticeGraph:
 
                     if (col + 1) < n_cols and (row - 1) >= 0 and angle == 0:
                         v_right_up = (row - 1, col + 1, 90)
-                        self._graph.set_edge(v, v_right_up, 2)
+                        self._graph.set_edge(v, v_right_up, np.pi)
 
                     if (col + 1) < n_cols and (row + 1) < n_rows and angle == 0:
                         v_right_down = (row + 1, col + 1, 270)
-                        self._graph.set_edge(v, v_right_down, 2)
+                        self._graph.set_edge(v, v_right_down, np.pi)
 
         # arcs
-        npoints = int(lattice_cell_size * np.pi / 2) + 1
+        npoints = int(lattice_cell_size * np.pi / 2 )
         pts_0_to_90 = np.zeros((2, npoints))
         for i in range(npoints):
             x = np.cos(float(i) / float(npoints - 1) * np.pi / 2) * lattice_cell_size - lattice_cell_size
@@ -251,7 +251,7 @@ class ObstaclesGrid:
 
         if edge_val == 1:  # line
             pts = self._get_pts_from_line(pt1, pt2, lattice_cell_size)
-        elif edge_val == 2:  # arc
+        elif edge_val > 1:  # arc
             pts = self._get_pts_from_arc(pt1, pt2, lattice_cell_size, arc_primitives)
         else:
             pts = [(-99, -99)]

@@ -12,24 +12,31 @@ def plot_scene(obs, graph, arc_length):
     return ax
 
 
-def plot_graph(ax, graph, arc_length):
+def plot_graph(ax, graph, obs, arc_length):
 
-    for edge in list(graph._graph._edge_dict):
+    for edge, val in graph._graph._edge_dict.items():
+
+            is_valid = obs.is_edge_valid(edge, val, graph._lattice_cell_size, graph._arc_primitives)
+
+            if is_valid:
+                color = (0.31, 0.1, 0.6)
+            else:
+                color = (0.7, 0.1, 0.3)
 
             if len(edge[0]) == 2:
 
                 v1 = edge[0]
                 v2 = edge[1]
-                ax.plot(v1[1] * arc_length, v1[0] * arc_length, 'bs', markersize=1)
-                ax.plot([v1[1] * arc_length, v2[1] * arc_length], [v1[0] * arc_length, v2[0] * arc_length], color=(0.31, 0.1, 0.6), linewidth=0.5)
+                ax.plot(v1[1] * arc_length, v1[0] * arc_length, 's', color=color, markersize=1)
+                ax.plot([v1[1] * arc_length, v2[1] * arc_length], [v1[0] * arc_length, v2[0] * arc_length], color=color, linewidth=0.5)
 
             else:
 
                 if edge[0][2] == edge[1][2]:
                     v1 = edge[0]
                     v2 = edge[1]
-                    ax.plot(v1[1] * arc_length, v1[0] * arc_length, 'bs', markersize=1)
-                    ax.plot([v1[1] * arc_length, v2[1] * arc_length], [v1[0] * arc_length, v2[0] * arc_length], color=(0.31, 0.1, 0.6), linewidth=0.5)
+                    ax.plot(v1[1] * arc_length, v1[0] * arc_length, 's', color=color, markersize=1)
+                    ax.plot([v1[1] * arc_length, v2[1] * arc_length], [v1[0] * arc_length, v2[0] * arc_length], color=color, linewidth=0.5)
                     #plt.pause(0.01)
 
                 else:
@@ -37,7 +44,7 @@ def plot_graph(ax, graph, arc_length):
                     v2 = edge[1]
                     arc = graph._arc_primitives[(v1[2], v2[2])]
                     arc = np.array(v1[:2]).reshape((2, 1)) * arc_length + arc
-                    ax.plot(arc[1, :], arc[0, :], color=(0.31, 0.1, 0.6), linewidth=0.5)
+                    ax.plot(arc[1, :], arc[0, :], color=color, linewidth=0.5)
                     #plt.pause(0.01)
     plt.pause(0.01)
 
