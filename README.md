@@ -2,6 +2,9 @@
 
 Implementation of lattice path planner.
 
+Lattice types: Square grid, Arcs
+Solvers: BFS, Dijkstra, (A* comming soon)
+
 ### requires:
 numpy, matplotlib
 
